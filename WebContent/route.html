@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>快递历史记录</title>
+<link rel="stylesheet" href="assets/style.css">
+<script type="text/javascript" src="assets/CookieUtil.js"></script>
+<script type="text/javascript" src="assets/ExpressCheck.js"></script>
+</head>
+<body>
+	<div id="header">
+		用户客户端
+		<script type="text/javascript">login();</script>
+	</div>
+	<div id="content">
+		<div id="left">
+			<ul>
+				<li><a href="index.html">首页</a></li>
+			</ul>
+			<hr>
+			<ul>
+				<li><a href="history.html">待取快件</a></li>
+				<li><a href="route.html">全部快件</a></li>
+				<li><a href="evaluate.html">服务评价</a></li>
+			</ul>
+		</div>
+	
+		<div id="right">
+			<!-- 这里填充你的代码 -->
+			<table border="1" id="jsonTable">
+				 <tr>
+				 	<th>订单编号</th>
+				 	<th>订单提交时间</th>
+				 	<th>发货时间</th>
+				 	<th>到达时间</th>
+				 	<th>签收时间</th>
+				 	<th>签收地点</th>
+				 </tr>
+			</table>
+		
+		</div>
+		
+	</div>
+	<div class="clear"></div>
+	<script type="text/javascript">footer();</script>
+	<script type="text/javascript">footer();</script>
+	<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			$(function() {
+				getDate();
+ 
+				function getDate() {
+					var temp = '';
+					$.ajax({
+						type: "get",//请求方式
+						url: "",//请求的url
+						dataType: "json",//后台数据返回类
+						success: function(res) {//响应成功执行的
+							var list = res.route
+							
+						
+							for(var i = 0; i < list.length; i++) {
+								temp +=
+									'<tr>' +
+									'<td>' + (i+1) + '</td>' +
+									'<td>' + list[i].submit + '</td>' +
+									'<td>' + list[i].send+ '</td>' +
+									'<td>' + list[i].arrive + '</td>' +
+									'<td>' + list[i].sign + '</td>' +
+									'<td>' + list[i].location+ '</td>' +
+									'</tr>';
+								
+							}
+							$("#jsonTable tr:not(:first)").html(""); /*  除了第一行tr的内容，其余内容清空，防止获取重复的数据  */
+							$("#jsonTable").append(temp);
+							
+						},
+						error:function(){
+							temp += '<tr><td>'+"暂无结果"+'</td></tr>';
+							$("#jsonTable").append(temp);
+						}
+					});
+				}
+			});
+		</script>
+	
+	
+</body>
+</html>

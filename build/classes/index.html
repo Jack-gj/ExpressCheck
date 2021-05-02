@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" lang="en">
+<title>快递查询客户端</title>
+<meta name="viewport" 
+	content="width=device-width, initial-scale=1.0, 
+	minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" />
+<link rel="stylesheet" href="assets/style.css">
+<script type="text/javascript" src="assets/CookieUtil.js"></script>
+<script type="text/javascript" src="assets/ExpressCheck.js"></script>
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
+<script type="text/javascript">  
+       $(document).ready(function(){
+    		 var a = ("登陆IP："+returnCitySN['cip'] + "<br/>IP归属地：" +returnCitySN['cname']);
+    		 if(CookieUtil.get("uid")!=null){
+    			 a += "<br/>欢迎用户<span style='color:green;font-weight:bold'>"+CookieUtil.get("uid")+"</span>登录！";
+    		 }
+         	$('#welcome').html(a);
+    	 });
+</script>
+</head>
+<body>
+	<div id="header">
+		<span id="title">用户客户端</span>
+		<script type="text/javascript">login();</script>
+	</div>
+	<div class="clear"></div>
+	
+	<div id="content">
+		<div id="left">
+			<ul>
+				<li><a href="index.html">首页</a></li>
+			</ul>
+			<hr>
+			<ul>
+				<li><a href="history.html">待取快件</a></li>
+				<li><a href="route.html">全部快件</a></li>
+				<li><a href="evaluate.html">服务评价</a></li>
+			</ul>
+		</div>
+	
+		<div id="right" style="color:blue;">
+			<div >
+				<h1>首页</h1><hr>
+				<span id="welcome" style="font-size:25px;"></span>
+			</div>
+		</div>
+	</div>
+	<div class="clear"></div>
+	<script type="text/javascript">footer();</script>
+</body>
+</html>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>快递管理客户端</title>
+<link rel="stylesheet" href="assets/style.css">
+<script type="text/javascript" src="assets/CookieUtil.js"></script>
+<script type="text/javascript" src="assets/ExpressCheck.js"></script>
+<style>
+	#search_customer{
+		margin-top:30px;
+	}
+	#btn_add{
+		margin-left: 30px;
+	}
+	#hint{
+		color:red;
+	}
+	
+</style>
+</head>
+<body>
+	<div id="header">
+		快递管理客户端
+		<script>login();</script>
+	</div>
+	<div id="content">
+		<div id="left">
+			<ul>
+				<li><a href="index2.html">首页</a></li>
+			</ul>
+			<hr>
+			<ul>
+				<li><a href="CustomerInfo.html">用户管理</a></li>
+				<li><a href="ExpressSheet.html">营业网点运单查询</a></li>
+				<li><a href="ExpressTrace.html">快件历史跟踪</a></li>
+				<li><a href="Transpackage.html">包裹查询</a></li>
+				<li><a href="ExpressStatistics.html">分拣中心包裹处理统计</a></li>
+			</ul>
+		</div>
+	
+		<div id="right">
+			<div id="search_customer">
+				<span id="hint"></span>
+				<input type="text" id="nit" placeholder="输入姓名或电话进行查询……">
+				<button id="btn_search">Search</button>
+				<button id="btn_add">Add</button>
+			</div>
+			<div id="show">
+				<table border="1" id="jsonTable">
+				
+					 <tr>
+					 	<th>编号</th>
+					 	<th>姓名</th>
+					 	<th>电话</th>
+					 	<th>所属机构</th>
+					 	<th>地区码</th>
+					 	<th>地区</th>
+					 	<th>地址</th>
+					 	<th>邮政编码</th>	
+					 </tr>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div class="clear"></div>
+	<script type="text/javascript">footer();</script>
+	<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			
+			$(function() {
+				getDate();
+				function getDate(){
+					var temp = '';					
+					$.ajax({
+						type: "get",//请求方式
+						url: "http://localhost:8080/TestCxfHibernate/REST/Misc/getAllCustomerInfo?_type=json",//请求的url
+						dataType: "json",//后台数据返回类
+						async:true,
+						success: function(res) {//响应成功执行的
+							var list = res;
+							for(var i=0; i<list.length; i++)
+								temp +=
+									'<tr>' +
+									'<td>' + list[i].ID + '</td>' +
+									'<td>' + list[i].name+ '</td>' +
+									'<td>' + list[i].telCode + '</td>' +
+									'<td>' + list[i].department + '</td>' +
+									'<td>' + list[i].regionCode+ '</td>' +
+									'<td>' + list[i].regionString+ '</td>' +
+									'<td>' + list[i].address + '</td>' +
+									'<td>' + list[i].postCode + '</td>' +
+									'</tr>';
+								
+							
+							$("#jsonTable tr:not(:first)").html(""); /*  除了第一行tr的内容，其余内容清空，防止获取重复的数据  */
+							$("#jsonTable").append(temp);
+							
+						},
+						error: function(){
+							temp += 
+								'<tr><td>'+"无结果"+'</td></tr>';
+							$("#jsonTable tr:not(:first)").html(""); /*  除了第一行tr的内容，其余内容清空，防止获取重复的数据  */
+							$("#jsonTable").append(temp);
+						}
+					});
+				};
+				$("#btn_search").click(
+				function() {
+					var temp = '';
+					
+					var para = document.getElementById('nit').value;
+					if(para==""){
+						document.getElementById('hint').innerHTML = "输入为空！";
+						return;
+					}
+					
+					document.getElementById('hint').innerHTML = "";
+					if(para.indexOf("1") != -1){
+						$.ajax({
+							type: "get",//请求方式
+							//url: "http://localhost:8080/TestCxfHibernate/REST/Misc/getCustomerInfo/"+para,//请求的url
+							//url: "http://localhost:8080/TestCxfHibernate/REST/Misc/getCustomerListByName/"+para,//请求的url
+							url: "http://localhost:8080/TestCxfHibernate/REST/Misc/getCustomerListByTelCode/"+para,//请求的url
+							dataType: "json",//后台数据返回类
+							success: function(res) {//响应成功执行的
+								if(res!=""){
+									var list = res;
+									for(var i=0; i<list.length; i++){
+										temp +=
+											'<tr>' +
+											'<td>' + list[i].ID + '</td>' +
+											'<td>' + list[i].name+ '</td>' +
+											'<td>' + list[i].telCode + '</td>' +
+											'<td>' + list[i].department + '</td>' +
+											'<td>' + list[i].regionCode+ '</td>' +
+											'<td>' + list[i].regionString+ '</td>' +
+											'<td>' + list[i].address + '</td>' +
+											'<td>' + list[i].postCode + '</td>' +
+											'<td><a href="#">' + "修改" + '</a></td>' +
+											'</tr>';
+									}
+									
+									
+								
+									$("#jsonTable tr:not(:first)").html(""); /*  除了第一行tr的内容，其余内容清空，防止获取重复的数据  */
+									$("#jsonTable").append(temp);
+								}else{
+									document.getElementById('hint').innerHTML = "查询数据为空！";
+								}
+								
+								
+							},
+							error: function(){
+								temp += 
+									'<tr><td>'+"无查询结果"+'</td></tr>';
+								$("#jsonTable tr:not(:first)").html(""); /*  除了第一行tr的内容，其余内容清空，防止获取重复的数据  */
+								$("#jsonTable").append(temp);
+							}
+						});
+					}
+					else{
+						$.ajax({
+							type: "get",//请求方式
+							//url: "http://localhost:8i80/TestCxfHibernate/REST/Misc/getCustomerInfo/"+para,//请求的url
+							url: "http://localhost:8080/TestCxfHibernate/REST/Misc/getCustomerListByName/"+para,//请求的url
+							//url: "http://localhost:8080/TestCxfHibernate/REST/Misc/getCustomerListByTel/"+para,//请求的url
+							dataType: "json",//后台数据返回类
+							success: function(res) {//响应成功执行的
+								if(res!=""){
+									var list = res;
+									for(var i=0; i<list.length; i++){
+										temp +=
+											'<tr>' +
+											'<td>' + list[i].ID + '</td>' +
+											'<td>' + list[i].name+ '</td>' +
+											'<td>' + list[i].telCode + '</td>' +
+											'<td>' + list[i].department + '</td>' +
+											'<td>' + list[i].regionCode+ '</td>' +
+											'<td>' + list[i].regionString+ '</td>' +
+											'<td>' + list[i].address + '</td>' +
+											'<td>' + list[i].postCode + '</td>' +
+											'<td><a href="#">' + "修改" + '</a></td>' +
+											'</tr>';
+									}
+									
+									$("#jsonTable tr:not(:first)").html(""); /*  除了第一行tr的内容，其余内容清空，防止获取重复的数据  */
+									$("#jsonTable").append(temp);
+								}else{
+									document.getElementById('hint').innerHTML = "查询数据为空！";
+								}
+								
+								
+							},
+							error: function(){
+								temp += 
+									'<tr><td>'+"无查询结果"+'</td></tr>';
+								$("#jsonTable tr:not(:first)").html(""); /*  除了第一行tr的内容，其余内容清空，防止获取重复的数据  */
+								$("#jsonTable").append(temp);
+							}
+						});
+					}
+					
+				});
+				$("#btn_add").click(
+						function(){
+							window.location.href = "AddCustomerInfo.html";
+						});
+			});
+		</script>
+
+</body>
+</html>

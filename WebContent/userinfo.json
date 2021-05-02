@@ -1,0 +1,32 @@
+{
+	"user": [
+		{
+			"ID": 1,
+			"Name": "Jack",
+			"TelCode": 1234234,
+			"Department": "School",
+			"RegionCode": 110105,
+			"Address": "Henan Province Zhenzhou City",
+			"PostCode": 463323
+		},
+		{
+			"ID": 2,
+			"Name": "LiMing",
+			"TelCode": 1234234,
+			"Department": "Goverment",
+			"RegionCode": 110105,
+			"Address": "Henan Province Zhengzhou City",
+			"PostCode": 32342434
+		},
+		{
+			"ID": 3,
+			"Name": "LiMing",
+			"TelCode": 1234234,
+			"Department": "Goverment",
+			"RegionCode": 110105,
+			"Address": "Henan Province Zhengzhou City",
+			"PostCode": 32342434
+		}
+	]
+}
+

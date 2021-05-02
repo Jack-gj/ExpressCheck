@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>客户评价界面</title>
+<link rel="stylesheet" href="assets/style.css">
+<script type="text/javascript" src="assets/CookieUtil.js"></script>
+<script type="text/javascript" src="assets/ExpressCheck.js"></script>
+</head>
+<body>
+	<div id="header">
+		用户客户端
+		<script type="text/javascript">login();</script>
+	</div>
+	<div id="content">
+		<div id="left">
+		<ul>
+			<li><a href="index.html">首页</a></li>
+		</ul>
+		<hr>
+		<ul>
+			<li><a href="history.html">快件历史记录</a></li>
+			<li><a href="route.html">快件历史路径</a></li>
+			<li><a href="evaluate.html">服务评价</a></li>
+		</ul>
+	</div>
+	
+	<div id="right">
+		<div id="textarea">
+			<textarea placeholder="这里输入你的评价，不超过100字……" id="evaluate" maxlength="100" cols="20"></textarea>
+			<br><button onclick="submitEvaluation()">提交</button>
+		</div>
+		<div>
+			<span id="hint" style="color:green;font:60px;"></span>
+		</div>
+	</div>
+	</div>
+	<div class="clear"></div>
+	<script type="text/javascript">footer();</script>
+	<script>
+		function submitEvaluation(){
+			
+			var xmlhttp;
+			var eva = document.getElementById('evaluate').value;
+			if(eva==""){
+				alert("输入为空，请重新输入！");
+				return;
+			}
+			var hint = document.getElementById('hint');
+			if (window.XMLHttpRequest)
+			{
+				//  IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码
+				xmlhttp=new XMLHttpRequest();
+			}
+			else
+			{
+				// IE6, IE5 浏览器执行代码
+				xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+			}
+			
+			xmlhttp.onreadystatechange=function()
+			{
+				if (xmlhttp.readyState==4 && xmlhttp.status==200)
+				{
+					hint.innerHTML = xmlhttp.responseText;
+					document.getElementById('evaluate').value = "";
+					
+				}
+			}
+			xmlhttp.open("GET","HandleEva?eva="+eva,true);
+			xmlhttp.send();
+		}
+	</script>
+	
+</body>
+</html>

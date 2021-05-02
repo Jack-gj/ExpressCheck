@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*" />
+    <meta http-equiv="Access-Control-Allow-Credentials" content="true"/>
+    <title>消息框</title>
+    <meta charset="utf-8">
+<script type="text/javascript" src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+</head>
+<body>
+<div>
+<button onclick="test()">SEND</button>
+<span id="hint"></span>
+</div>
+<script>
+function test() {
+	$.ajax({  
+    url:'http://localhost:8080/TestCxfHibernate/REST/Misc/getCustomerListByName/李明年?_type=json',  
+    method:'get',  
+    dataType:'json',  
+    success:function(res){  
+        document.getElementById('hint').innerHTML = res[0].name;
+    },  
+  }); 
+}
+</script>
+</body>
+</html>

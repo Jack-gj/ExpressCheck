@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>快递管理客户端</title>
+<link rel="stylesheet" href="assets/style.css">
+<script type="text/javascript" src="assets/CookieUtil.js"></script>
+<script type="text/javascript" src="assets/ExpressCheck.js"></script>
+<style>
+	#search_input{
+		margin-top: 30px;
+	}
+		
+</style>
+</head>
+<body>
+	<div id="header">
+		快递管理客户端
+		<script>login();</script>
+	</div>
+	<div id="content">
+		<div id="left">
+			<ul>
+				<li><a href="index2.html">首页</a></li>
+			</ul>
+			<hr>
+			<ul>
+			<li><a href="CustomerInfo.html">用户管理</a></li>
+			<li><a href="ExpressSheet.html">营业网点运单查询</a></li>
+			<li><a href="ExpressTrace.html">快件历史跟踪</a></li>
+			<li><a href="Transpackage.html">包裹查询</a></li>
+			<li><a href="ExpressStatistics.html">分拣中心包裹处理统计</a></li>
+		</ul>
+		</div>
+	
+		<div id="right">
+			<div id="search_input">
+				<span id="hint"></span>
+				<input id="search_es" type="text" placeholder="输入订单号进行查询……"><button id="btn_es">Search</button>
+			</div>
+			<div id="show">
+				<table border="1" id="jsonTable">
+					
+						 <tr>
+						 	<th>运单编号</th>
+						 	<th>发件人</th>
+						 	<th>收件人</th>
+						 	<th>重量</th>
+						 	<th>运输费用</th>
+						 	<th>接收时间</th>
+						 	<th>运输时间</th>
+						 	<th>运单状态</th>
+						 </tr>
+						 
+						 
+				</table>
+			</div>
+		</div>
+	</div>
+	<div class="clear"></div>
+	<script type="text/javascript">footer();</script>
+	<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+		$(function(){
+			getDate();
+			function getDate(){
+				var temp = "";					
+				$.ajax({
+					type: "get",//请求方式
+					url: "http://localhost:8080/TestCxfHibernate/REST/Domain/getAllExpressSheet",//请求的url
+					dataType: "json",//后台数据返回类
+					async:true,
+					success: function(res) {//响应成功执行的
+						var list = res;		
+					
+						for(var i=0; i<list.length; i++){
+							temp +=
+								'<tr>' +
+								'<td>' + list[i].ID+ '</td>' +
+								'<td>' + list[i].sender.name+ '</td>' +
+								'<td>' + list[i].recever.name + '</td>' +
+								'<td>' + list[i].weight + '</td>' +
+								'<td>' + list[i].tranFee+ '</td>' +
+								'<td>' + list[i].accepteTime+ '</td>' +
+								'<td>' + list[i].deliveTime + '</td>' +
+								'<td>' + list[i].status + '</td>' +
+								'</tr>';
+						}	
+						$("#jsonTable tr:not(:first)").html(""); /*  除了第一行tr的内容，其余内容清空，防止获取重复的数据  */
+						$("#jsonTable").append(temp);
+					},
+					error: function(){
+						temp = '<tr><td>'+"无结果"+'</td></tr>';
+						$("#jsonTable tr:not(:first)").html(""); /*  除了第一行tr的内容，其余内容清空，防止获取重复的数据  */
+						$("#jsonTable").append(temp);
+					}
+				});
+				
+			}
+			
+			$("#btn_es").click(
+			function() {
+				var para = document.getElementById('search_es').value;
+				if(para==""){
+					document.getElementById('hint').innerHTML = "输入为空！";
+					return;
+				}
+				document.getElementById('hint').innerHTML = "";
+				var temp = '';					
+				$.ajax({
+					type: "get",//请求方式
+					url: "http://localhost:8080/TestCxfHibernate/REST/Domain/getExpressSheet/"+para,//请求的url
+					dataType: "json",//后台数据返回类
+					async:true,
+					success: function(res) {//响应成功执行的
+						var list = res;						
+							temp +=
+								'<tr>' +
+								'<td>' + list.ID+ '</td>' +
+								'<td>' + list.sender.name+ '</td>' +
+								'<td>' + list.recever.name + '</td>' +
+								'<td>' + list.weight + '</td>' +
+								'<td>' + list.tranFee+ '</td>' +
+								'<td>' + list.accepteTime+ '</td>' +
+								'<td>' + list.deliveTime + '</td>' +
+								'<td>' + list.status + '</td>' +
+								'</tr>';
+							$("#jsonTable tr:not(:first)").html(""); /*  除了第一行tr的内容，其余内容清空，防止获取重复的数据  */
+							$("#jsonTable").append(temp);
+					},
+					error: function(){
+						temp = '<tr><td>'+"无结果"+'</td></tr>';
+						$("#jsonTable tr:not(:first)").html(""); /*  除了第一行tr的内容，其余内容清空，防止获取重复的数据  */
+						$("#jsonTable").append(temp);
+					}
+				});
+				$("#jsonTable tr:not(:first)").html(""); /*  除了第一行tr的内容，其余内容清空，防止获取重复的数据  */
+				$("#jsonTable").append(temp);
+		});
+	})
+	</script>
+	
+</body>
+</html>

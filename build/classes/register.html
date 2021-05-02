@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" 
+	content="width=device-width, initial-scale=1.0, 
+	minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" />
+<title>用户注册</title>
+<link rel="stylesheet" href="assets/style.css">
+<style>
+	h1{
+		color:blue;
+	}
+	span{
+		display:inline-block; 
+		width:100px;
+	}
+</style>
+</head>
+<body>
+	<h1>用户注册</h1><hr>
+	<div id="register">
+		<form id="form_register" action="" style="text-align:center;">
+			<div><span>姓名</span><input type="text" id="name"></div>	
+			<div><span>电话</span><input type="text" id="tel"></div>	
+			<div><span>所属机构</span><input type="text" id="department"></div>
+			<div><span>地区码</span><input type="text" id="regionCode"></div>
+			<div><span>地址</span><input type="text" id="address"></div>
+			<div><span>邮政编码</span><input type="text" id="postCode"></div><br>	
+			<div><input id="btn_submit" type="button" onclick="submit" value="提交"></div>
+		</form>	
+	</div>
+</body>
+</html>
